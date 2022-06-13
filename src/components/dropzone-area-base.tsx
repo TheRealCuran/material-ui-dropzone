@@ -5,7 +5,6 @@ import {
   Button,
   ChipProps,
   Snackbar,
-  SnackbarOrigin,
   SnackbarProps,
   styled,
   Typography,
@@ -23,10 +22,10 @@ import {
   FileObject,
   PreviewGridProps,
 } from './dropzone.defs'
+import { DropzoneContext } from './dropzone-ctx'
 
 interface DropzoneAreaBaseState extends DropzoneAreaBaseProps {
   filesLimit: number
-  fileObjects: FileObject[]
   maxFileSize: number
   dropzoneText: string
   previewText: string
@@ -61,6 +60,9 @@ class DropzoneAreaBaseImpl extends React.PureComponent<
   DropzoneAreaBaseProps,
   DropzoneAreaBaseState
 > {
+  static contextType = DropzoneContext
+  declare context: React.ContextType<typeof DropzoneContext>
+
   #defaultGetPreviewIcon(fileObject: FileObject): JSX.Element {
     if (isImage(fileObject.file) && fileObject.data !== null) {
       return <img role="presentation" src={fileObject.data} />
@@ -72,7 +74,6 @@ class DropzoneAreaBaseImpl extends React.PureComponent<
   #defaultProps: DropzoneAreaBaseState = {
     acceptedFiles: [],
     filesLimit: 3,
-    fileObjects: [],
     maxFileSize: 3_000_000,
     dropzoneText: 'Drag and drop a file here or click',
     previewText: 'Preview:',
@@ -115,18 +116,13 @@ class DropzoneAreaBaseImpl extends React.PureComponent<
     snackbarVariant: 'success',
   }
 
-  #defaultSnackbarAnchorOrigin: SnackbarOrigin = {
-    horizontal: 'left',
-    vertical: 'bottom',
-  }
-
   constructor(props: DropzoneAreaBaseProps) {
     super(props)
 
     this.state = merge(this.#defaultProps, props)
   }
 
-  #notifyAlert() {
+  notifyAlert() {
     const { openSnackBar, snackbarMessage, snackbarVariant, onAlert } =
       this.state
     if (openSnackBar && onAlert) {
@@ -135,15 +131,14 @@ class DropzoneAreaBaseImpl extends React.PureComponent<
   }
 
   // eslint-disable-next-line sonarjs/cognitive-complexity
-  handleDropAccepted(acceptedFiles: File[], evt: DropEvent): void {
+  #handleDropAccepted(acceptedFiles: File[], evt: DropEvent): void {
     const {
-      fileObjects,
       filesLimit,
       getFileAddedMessage,
       getFileLimitExceedMessage,
-      onAdd,
       onDrop,
     } = this.state
+    const fileObjects = this.context.fileObjects
 
     if (
       filesLimit > 1 &&
@@ -155,7 +150,7 @@ class DropzoneAreaBaseImpl extends React.PureComponent<
           snackbarMessage: getFileLimitExceedMessage(filesLimit),
           snackbarVariant: 'error',
         },
-        this.#notifyAlert.bind(this),
+        this.notifyAlert.bind(this),
       )
       return
     }
@@ -176,8 +171,8 @@ class DropzoneAreaBaseImpl extends React.PureComponent<
     )
       .then((fileObjs: FileObject[]) => {
         // Notify added files
-        if (onAdd) {
-          onAdd(fileObjs)
+        if (this.context.addFiles) {
+          this.context.addFiles(fileObjs)
         }
 
         // Display message
@@ -191,7 +186,7 @@ class DropzoneAreaBaseImpl extends React.PureComponent<
             snackbarMessage: message,
             snackbarVariant: 'success',
           },
-          this.#notifyAlert.bind(this),
+          this.notifyAlert.bind(this),
         )
 
         return true
@@ -207,21 +202,21 @@ class DropzoneAreaBaseImpl extends React.PureComponent<
             snackbarMessage: msg,
             snackbarVariant: 'error',
           },
-          this.#notifyAlert.bind(this),
+          this.notifyAlert.bind(this),
         )
       })
   }
 
-  handleDropRejected(rejectedFiles: FileRejection[], evt: DropEvent): void {
+  #handleDropRejected(rejectedFiles: FileRejection[], evt: DropEvent): void {
     const {
       acceptedFiles,
       filesLimit,
-      fileObjects,
       getDropRejectMessage,
       getFileLimitExceedMessage,
       maxFileSize,
       onDropRejected,
     } = this.state
+    const fileObjects = this.context.fileObjects
 
     let message = ''
     if (fileObjects.length + rejectedFiles.length > filesLimit) {
@@ -249,21 +244,22 @@ class DropzoneAreaBaseImpl extends React.PureComponent<
         snackbarMessage: message,
         snackbarVariant: 'error',
       },
-      this.#notifyAlert.bind(this),
+      this.notifyAlert.bind(this),
     )
   }
 
-  handleRemove(fileIndex: number, evt: React.MouseEvent<HTMLButtonElement>) {
+  #handleRemove(fileIndex: number, evt: React.MouseEvent<HTMLButtonElement>) {
     evt.stopPropagation()
 
-    const { fileObjects, getFileRemovedMessage, onDelete } = this.state
+    const { getFileRemovedMessage } = this.state
+    const fileObjects = this.context.fileObjects
 
     // Find removed fileObject
     const removedFileObj = fileObjects[fileIndex]
 
     // Notify removed file
-    if (onDelete) {
-      onDelete(removedFileObj, fileIndex)
+    if (this.context.deleteFile) {
+      this.context.deleteFile(removedFileObj, fileIndex)
     }
 
     this.setState(
@@ -272,11 +268,11 @@ class DropzoneAreaBaseImpl extends React.PureComponent<
         snackbarMessage: getFileRemovedMessage(removedFileObj.file.name),
         snackbarVariant: 'info',
       },
-      this.#notifyAlert.bind(this),
+      this.notifyAlert.bind(this),
     )
   }
 
-  handleCloseSnackbar() {
+  #handleCloseSnackbar() {
     this.setState({
       openSnackBar: false,
     })
@@ -297,7 +293,6 @@ class DropzoneAreaBaseImpl extends React.PureComponent<
       disableRejectionFeedback,
       dropzoneProps,
       dropzoneText,
-      fileObjects,
       filesLimit,
       getPreviewIcon,
       Icon,
@@ -317,6 +312,7 @@ class DropzoneAreaBaseImpl extends React.PureComponent<
       snackbarMessage,
       snackbarVariant,
     } = this.state
+    const fileObjects = this.context.fileObjects
 
     const acceptFiles = Object.fromEntries(
       acceptedFiles.map((key) => [key, []]),
@@ -331,9 +327,9 @@ class DropzoneAreaBaseImpl extends React.PureComponent<
         <Dropzone
           {...dropzoneProps}
           accept={acceptFiles}
-          onDropAccepted={(files, evt) => this.handleDropAccepted(files, evt)}
+          onDropAccepted={(files, evt) => this.#handleDropAccepted(files, evt)}
           onDropRejected={(fileRejections, evt) =>
-            this.handleDropRejected(fileRejections, evt)
+            this.#handleDropRejected(fileRejections, evt)
           }
           maxSize={maxFileSize}
           multiple={isMultiple}
@@ -375,7 +371,7 @@ class DropzoneAreaBaseImpl extends React.PureComponent<
               {previewsInDropzoneVisible && (
                 <PreviewList
                   fileObjects={fileObjects}
-                  handleRemove={(idx, evt) => this.handleRemove(idx, evt)}
+                  handleRemove={(idx, evt) => this.#handleRemove(idx, evt)}
                   getPreviewIcon={getPreviewIcon}
                   showFileNames={showFileNames}
                   useChipsForPreview={useChipsForPreview}
@@ -414,7 +410,7 @@ class DropzoneAreaBaseImpl extends React.PureComponent<
 
             <PreviewList
               fileObjects={fileObjects}
-              handleRemove={(idx, evt) => this.handleRemove(idx, evt)}
+              handleRemove={(idx, evt) => this.#handleRemove(idx, evt)}
               getPreviewIcon={getPreviewIcon}
               showFileNames={showFileNamesInPreview}
               useChipsForPreview={useChipsForPreview}
@@ -428,14 +424,12 @@ class DropzoneAreaBaseImpl extends React.PureComponent<
           (Array.isArray(showAlerts) &&
             showAlerts.includes(snackbarVariant))) && (
           <Snackbar
-            anchorOrigin={this.#defaultSnackbarAnchorOrigin}
-            autoHideDuration={6000}
             {...alertSnackbarProps}
             open={openSnackBar}
-            onClose={() => this.handleCloseSnackbar()}
+            onClose={() => this.#handleCloseSnackbar()}
           >
             <SnackbarContentWrapper
-              onClose={() => this.handleCloseSnackbar()}
+              onClose={() => this.#handleCloseSnackbar()}
               variant={snackbarVariant}
               message={snackbarMessage}
             />

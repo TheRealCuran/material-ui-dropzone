@@ -4,6 +4,7 @@ import isEqual from 'lodash.isequal'
 import { createFileFromUrl, readFile } from '../helpers'
 import { DropzoneAreaBase } from './dropzone-area-base'
 import { DropzoneAreaBaseProps, FileData, FileObject } from './dropzone.defs'
+import { DropzoneContext } from './dropzone-ctx'
 
 interface DropzoneAreaProps
   extends Omit<DropzoneAreaBaseProps, 'fileObjects' | 'onAdd' | 'onDelete'> {
@@ -37,6 +38,11 @@ interface DropzoneAreaState extends DropzoneAreaProps {
   initialFiles: FileData[]
   filesLimit: number
   fileObjects: FileObject[]
+  addFiles(newFileObjects: FileObject[]): void
+  deleteFile(removedFileObj: FileObject, removedFileObjIdx: number): void
+  // unused in the DropzoneArea, but it's easier to have them always defined
+  handleClose(evt: React.SyntheticEvent): void
+  handleSave(evt: React.SyntheticEvent): void
 }
 
 /**
@@ -56,6 +62,16 @@ export class DropzoneArea extends React.PureComponent<
     filesLimit: 3,
     initialFiles: [],
     fileObjects: [],
+    addFiles: (newFileObjects: FileObject[]) => this.#addFiles(newFileObjects),
+    deleteFile: (removedFileObj: FileObject, removedFileObjIdx: number) =>
+      this.#deleteFile(removedFileObj, removedFileObjIdx),
+    // unused in the DropzoneArea, but it's easier to have them always defined
+    handleClose: (_evt: React.SyntheticEvent) => {
+      return
+    },
+    handleSave: (_evt: React.SyntheticEvent) => {
+      return
+    },
   }
 
   constructor(props: DropzoneAreaProps) {
@@ -179,18 +195,22 @@ export class DropzoneArea extends React.PureComponent<
   }
 
   render() {
-    const { fileObjects } = this.state
+    const { fileObjects, handleClose, handleSave, addFiles, deleteFile } =
+      this.state
     const splitProps = this.#splitDropzoneAreaProps()
 
     return (
-      <DropzoneAreaBase
-        {...splitProps.dropzoneAreaProps}
-        fileObjects={fileObjects}
-        onAdd={(newFiles: FileObject[]) => this.#addFiles(newFiles)}
-        onDelete={(deletedFileObject, index) =>
-          this.#deleteFile(deletedFileObject, index)
-        }
-      />
+      <DropzoneContext.Provider
+        value={{
+          fileObjects,
+          handleClose,
+          handleSave,
+          addFiles,
+          deleteFile,
+        }}
+      >
+        <DropzoneAreaBase {...splitProps.dropzoneAreaProps} />
+      </DropzoneContext.Provider>
     )
   }
 }

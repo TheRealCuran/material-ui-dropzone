@@ -4,6 +4,7 @@ import isEqual from 'lodash.isequal'
 import { DropzoneDialogBase } from './dropzone-dialog-base'
 import { createFileFromUrl, readFile } from '../helpers'
 import { DropzoneDialogBaseProps, FileData, FileObject } from './dropzone.defs'
+import { DropzoneContext } from './dropzone-ctx'
 
 interface DropzoneDialogProps
   extends Omit<DropzoneDialogBaseProps, 'fileObjects' | 'onSave'> {
@@ -22,6 +23,25 @@ interface DropzoneDialogProps
    * @param {SyntheticEvent} event The react `SyntheticEvent`.
    */
   onSave?(files: File[], event: React.SyntheticEvent): void
+  /**
+   * Fired when the modal is closed.
+   *
+   * @param {SyntheticEvent} event The react `SyntheticEvent`
+   */
+  onClose?(evt: React.SyntheticEvent): void
+  /**
+   * Fired when new files are added to dropzone.
+   *
+   * @param {FileObject[]} newFiles The new files added to the dropzone.
+   */
+  onAdd?(newFiles: FileObject[]): void
+  /**
+   * Fired when a file is deleted from the previews panel.
+   *
+   * @param {FileObject} deletedFileObject The file that was removed.
+   * @param {number} index The index of the removed file object.
+   */
+  onDelete?(deletedFileObject: FileObject, index: number): void
 }
 
 interface DropzoneDialogState extends DropzoneDialogProps {
@@ -29,6 +49,10 @@ interface DropzoneDialogState extends DropzoneDialogProps {
   filesLimit: number
   initialFiles: FileData[]
   fileObjects: FileObject[]
+  addFiles(newFileObjects: FileObject[]): void
+  deleteFile(removedFileObj: FileObject, removedFileObjIdx: number): void
+  handleClose(evt: React.SyntheticEvent): void
+  handleSave(evt: React.SyntheticEvent): void
 }
 
 /**
@@ -49,6 +73,11 @@ export class DropzoneDialog extends React.PureComponent<
     filesLimit: 3,
     initialFiles: [],
     fileObjects: [],
+    addFiles: (newFileObjects: FileObject[]) => this.#addFiles(newFileObjects),
+    deleteFile: (removedFileObj: FileObject, removedFileObjIdx: number) =>
+      this.#deleteFile(removedFileObj, removedFileObjIdx),
+    handleClose: (evt: React.SyntheticEvent) => this.#handleClose(evt),
+    handleSave: (evt: React.SyntheticEvent) => this.#handleSave(evt),
   }
   constructor(props: DropzoneDialogProps) {
     super(props)
@@ -57,7 +86,11 @@ export class DropzoneDialog extends React.PureComponent<
   }
 
   #addFiles(newFileObjects: FileObject[]) {
-    const { filesLimit, fileObjects } = this.state
+    const { filesLimit, fileObjects, onAdd } = this.state
+
+    if (onAdd) {
+      onAdd(fileObjects)
+    }
 
     this.setState({
       fileObjects:
@@ -164,16 +197,20 @@ export class DropzoneDialog extends React.PureComponent<
   }
 
   render() {
+    const { fileObjects, addFiles, deleteFile, handleClose, handleSave } =
+      this.state
     return (
-      <DropzoneDialogBase
-        {...this.state}
-        onAdd={(newFiles) => this.#addFiles(newFiles)}
-        onDelete={(deletedFileObject, index) =>
-          this.#deleteFile(deletedFileObject, index)
-        }
-        onClose={(evt) => this.#handleClose(evt)}
-        onSave={(evt) => this.#handleSave(evt)}
-      />
+      <DropzoneContext.Provider
+        value={{
+          fileObjects,
+          addFiles,
+          deleteFile,
+          handleClose,
+          handleSave,
+        }}
+      >
+        <DropzoneDialogBase {...this.state} />
+      </DropzoneContext.Provider>
     )
   }
 }

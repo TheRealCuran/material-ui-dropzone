@@ -11,6 +11,7 @@ import merge from 'lodash.merge'
 import isEqual from 'lodash.isequal'
 import { DropzoneAreaBase } from './dropzone-area-base'
 import { DropzoneDialogBaseProps } from './dropzone.defs'
+import { DropzoneContext } from './dropzone-ctx'
 
 interface DropzoneDialogBaseState extends DropzoneDialogBaseProps {
   open: boolean
@@ -33,6 +34,9 @@ export class DropzoneDialogBase extends React.PureComponent<
   DropzoneDialogBaseProps,
   DropzoneDialogBaseState
 > {
+  static contextType = DropzoneContext
+  declare context: React.ContextType<typeof DropzoneContext>
+
   #defaultProps: DropzoneDialogBaseState = {
     acceptedFiles: [],
     open: false,
@@ -66,24 +70,23 @@ export class DropzoneDialogBase extends React.PureComponent<
       dialogTitle,
       fullWidth,
       maxWidth,
-      onClose,
-      onSave,
       open,
       submitButtonText,
       ...dropzoneAreaProps
     } = this.state
+    const { fileObjects } = this.context
 
     // Submit button state
-    const submitDisabled =
-      dropzoneAreaProps.fileObjects === undefined ||
-      dropzoneAreaProps.fileObjects.length === 0
+    const submitDisabled = fileObjects === undefined || fileObjects.length === 0
 
     return (
       <Dialog
         {...dialogProps}
         fullWidth={fullWidth}
         maxWidth={maxWidth}
-        onClose={onClose}
+        onClose={(evt: React.SyntheticEvent<Element, Event>) =>
+          this.context.handleClose(evt)
+        }
         open={open}
       >
         <DialogTitle>{dialogTitle}</DialogTitle>
@@ -93,11 +96,18 @@ export class DropzoneDialogBase extends React.PureComponent<
         </DialogContent>
 
         <DialogActions>
-          <Button color="primary" onClick={onClose}>
+          <Button
+            color="primary"
+            onClick={() => this.setState({ open: false })}
+          >
             {cancelButtonText}
           </Button>
 
-          <Button color="primary" disabled={submitDisabled} onClick={onSave}>
+          <Button
+            color="primary"
+            disabled={submitDisabled}
+            onClick={(evt) => this.context.handleSave(evt)}
+          >
             {submitButtonText}
           </Button>
         </DialogActions>
