@@ -30,6 +30,10 @@ interface DropzoneAreaState extends DropzoneAreaProps {
     initialFiles: FileData[];
     filesLimit: number;
     fileObjects: FileObject[];
+    addFiles(newFileObjects: FileObject[]): void;
+    deleteFile(removedFileObj: FileObject, removedFileObjIdx: number): void;
+    handleClose(evt: React.SyntheticEvent): void;
+    handleSave(evt: React.SyntheticEvent): void;
 }
 /**
  * This components creates an uncontrolled Material-UI Dropzone, with previews and snackbar notifications.

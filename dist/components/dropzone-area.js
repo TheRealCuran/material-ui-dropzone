@@ -5,6 +5,7 @@ import merge from 'lodash.merge';
 import isEqual from 'lodash.isequal';
 import { createFileFromUrl, readFile } from '../helpers';
 import { DropzoneAreaBase } from './dropzone-area-base';
+import { DropzoneContext } from './dropzone-ctx';
 /**
  * This components creates an uncontrolled Material-UI Dropzone, with previews and snackbar notifications.
  *
@@ -22,6 +23,15 @@ export class DropzoneArea extends React.PureComponent {
             filesLimit: 3,
             initialFiles: [],
             fileObjects: [],
+            addFiles: (newFileObjects) => __classPrivateFieldGet(this, _DropzoneArea_instances, "m", _DropzoneArea_addFiles).call(this, newFileObjects),
+            deleteFile: (removedFileObj, removedFileObjIdx) => __classPrivateFieldGet(this, _DropzoneArea_instances, "m", _DropzoneArea_deleteFile).call(this, removedFileObj, removedFileObjIdx),
+            // unused in the DropzoneArea, but it's easier to have them always defined
+            handleClose: (_evt) => {
+                return;
+            },
+            handleSave: (_evt) => {
+                return;
+            },
         });
         this.state = merge(__classPrivateFieldGet(this, _DropzoneArea_defaultProps, "f"), props);
     }
@@ -64,9 +74,16 @@ export class DropzoneArea extends React.PureComponent {
         }
     }
     render() {
-        const { fileObjects } = this.state;
+        const { fileObjects, handleClose, handleSave, addFiles, deleteFile } = this.state;
         const splitProps = __classPrivateFieldGet(this, _DropzoneArea_instances, "m", _DropzoneArea_splitDropzoneAreaProps).call(this);
-        return (React.createElement(DropzoneAreaBase, { ...splitProps.dropzoneAreaProps, fileObjects: fileObjects, onAdd: (newFiles) => __classPrivateFieldGet(this, _DropzoneArea_instances, "m", _DropzoneArea_addFiles).call(this, newFiles), onDelete: (deletedFileObject, index) => __classPrivateFieldGet(this, _DropzoneArea_instances, "m", _DropzoneArea_deleteFile).call(this, deletedFileObject, index) }));
+        return (React.createElement(DropzoneContext.Provider, { value: {
+                fileObjects,
+                handleClose,
+                handleSave,
+                addFiles,
+                deleteFile,
+            } },
+            React.createElement(DropzoneAreaBase, { ...splitProps.dropzoneAreaProps })));
     }
 }
 _DropzoneArea_defaultProps = new WeakMap(), _DropzoneArea_instances = new WeakSet(), _DropzoneArea_notifyFileChange = function _DropzoneArea_notifyFileChange() {

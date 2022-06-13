@@ -5,6 +5,7 @@ import merge from 'lodash.merge';
 import isEqual from 'lodash.isequal';
 import { DropzoneDialogBase } from './dropzone-dialog-base';
 import { createFileFromUrl, readFile } from '../helpers';
+import { DropzoneContext } from './dropzone-ctx';
 /**
  * This component provides an uncontrolled version of the DropzoneDialogBase component.
  *
@@ -23,6 +24,10 @@ export class DropzoneDialog extends React.PureComponent {
             filesLimit: 3,
             initialFiles: [],
             fileObjects: [],
+            addFiles: (newFileObjects) => __classPrivateFieldGet(this, _DropzoneDialog_instances, "m", _DropzoneDialog_addFiles).call(this, newFileObjects),
+            deleteFile: (removedFileObj, removedFileObjIdx) => __classPrivateFieldGet(this, _DropzoneDialog_instances, "m", _DropzoneDialog_deleteFile).call(this, removedFileObj, removedFileObjIdx),
+            handleClose: (evt) => __classPrivateFieldGet(this, _DropzoneDialog_instances, "m", _DropzoneDialog_handleClose).call(this, evt),
+            handleSave: (evt) => __classPrivateFieldGet(this, _DropzoneDialog_instances, "m", _DropzoneDialog_handleSave).call(this, evt),
         });
         this.state = merge(__classPrivateFieldGet(this, _DropzoneDialog_defaultProps, "f"), props);
     }
@@ -65,11 +70,22 @@ export class DropzoneDialog extends React.PureComponent {
         }
     }
     render() {
-        return (React.createElement(DropzoneDialogBase, { ...this.state, onAdd: (newFiles) => __classPrivateFieldGet(this, _DropzoneDialog_instances, "m", _DropzoneDialog_addFiles).call(this, newFiles), onDelete: (deletedFileObject, index) => __classPrivateFieldGet(this, _DropzoneDialog_instances, "m", _DropzoneDialog_deleteFile).call(this, deletedFileObject, index), onClose: (evt) => __classPrivateFieldGet(this, _DropzoneDialog_instances, "m", _DropzoneDialog_handleClose).call(this, evt), onSave: (evt) => __classPrivateFieldGet(this, _DropzoneDialog_instances, "m", _DropzoneDialog_handleSave).call(this, evt) }));
+        const { fileObjects, addFiles, deleteFile, handleClose, handleSave } = this.state;
+        return (React.createElement(DropzoneContext.Provider, { value: {
+                fileObjects,
+                addFiles,
+                deleteFile,
+                handleClose,
+                handleSave,
+            } },
+            React.createElement(DropzoneDialogBase, { ...this.state })));
     }
 }
 _DropzoneDialog_defaultProps = new WeakMap(), _DropzoneDialog_instances = new WeakSet(), _DropzoneDialog_addFiles = function _DropzoneDialog_addFiles(newFileObjects) {
-    const { filesLimit, fileObjects } = this.state;
+    const { filesLimit, fileObjects, onAdd } = this.state;
+    if (onAdd) {
+        onAdd(fileObjects);
+    }
     this.setState({
         fileObjects: filesLimit <= 1
             ? [newFileObjects[0]]

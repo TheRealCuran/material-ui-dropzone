@@ -1,10 +1,9 @@
 import * as React from 'react';
 import { AlertColor, ChipProps, SnackbarProps } from '@mui/material';
-import { DropEvent, FileRejection } from 'react-dropzone';
 import { DropzoneAreaBaseProps, FileObject, PreviewGridProps } from './dropzone.defs';
+import { DropzoneContext } from './dropzone-ctx';
 interface DropzoneAreaBaseState extends DropzoneAreaBaseProps {
     filesLimit: number;
-    fileObjects: FileObject[];
     maxFileSize: number;
     dropzoneText: string;
     previewText: string;
@@ -32,11 +31,10 @@ interface DropzoneAreaBaseState extends DropzoneAreaBaseProps {
  */
 declare class DropzoneAreaBaseImpl extends React.PureComponent<DropzoneAreaBaseProps, DropzoneAreaBaseState> {
     #private;
+    static contextType: React.Context<import("./dropzone-ctx").DropzoneContextMembers>;
+    context: React.ContextType<typeof DropzoneContext>;
     constructor(props: DropzoneAreaBaseProps);
-    handleDropAccepted(acceptedFiles: File[], evt: DropEvent): void;
-    handleDropRejected(rejectedFiles: FileRejection[], evt: DropEvent): void;
-    handleRemove(fileIndex: number, evt: React.MouseEvent<HTMLButtonElement>): void;
-    handleCloseSnackbar(): void;
+    notifyAlert(): void;
     componentDidUpdate(prevProps: DropzoneAreaBaseProps): void;
     render(): JSX.Element;
 }

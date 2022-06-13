@@ -5,6 +5,7 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle, } from '@mui
 import merge from 'lodash.merge';
 import isEqual from 'lodash.isequal';
 import { DropzoneAreaBase } from './dropzone-area-base';
+import { DropzoneContext } from './dropzone-ctx';
 /**
  * This component provides the DropzoneArea inside of a Material-UI Dialog.
  *
@@ -34,18 +35,19 @@ export class DropzoneDialogBase extends React.PureComponent {
         }
     }
     render() {
-        const { cancelButtonText, dialogProps, dialogTitle, fullWidth, maxWidth, onClose, onSave, open, submitButtonText, ...dropzoneAreaProps } = this.state;
+        const { cancelButtonText, dialogProps, dialogTitle, fullWidth, maxWidth, open, submitButtonText, ...dropzoneAreaProps } = this.state;
+        const { fileObjects } = this.context;
         // Submit button state
-        const submitDisabled = dropzoneAreaProps.fileObjects === undefined ||
-            dropzoneAreaProps.fileObjects.length === 0;
-        return (React.createElement(Dialog, { ...dialogProps, fullWidth: fullWidth, maxWidth: maxWidth, onClose: onClose, open: open },
+        const submitDisabled = fileObjects === undefined || fileObjects.length === 0;
+        return (React.createElement(Dialog, { ...dialogProps, fullWidth: fullWidth, maxWidth: maxWidth, onClose: (evt) => this.context.handleClose(evt), open: open },
             React.createElement(DialogTitle, null, dialogTitle),
             React.createElement(DialogContent, null,
                 React.createElement(DropzoneAreaBase, { ...dropzoneAreaProps })),
             React.createElement(DialogActions, null,
-                React.createElement(Button, { color: "primary", onClick: onClose }, cancelButtonText),
-                React.createElement(Button, { color: "primary", disabled: submitDisabled, onClick: onSave }, submitButtonText))));
+                React.createElement(Button, { color: "primary", onClick: () => this.setState({ open: false }) }, cancelButtonText),
+                React.createElement(Button, { color: "primary", disabled: submitDisabled, onClick: (evt) => this.context.handleSave(evt) }, submitButtonText))));
     }
 }
 _DropzoneDialogBase_defaultProps = new WeakMap();
+DropzoneDialogBase.contextType = DropzoneContext;
 //# sourceMappingURL=dropzone-dialog-base.js.map

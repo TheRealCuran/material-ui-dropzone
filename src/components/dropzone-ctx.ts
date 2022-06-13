@@ -2,7 +2,7 @@
 import * as React from 'react'
 import { FileObject } from './dropzone.defs'
 
-interface DropzoneContextMembers {
+export interface DropzoneContextMembers {
   fileObjects: FileObject[]
   addFiles(newFileObjects: FileObject[]): void
   deleteFile(removedFileObj: FileObject, removedFileObjIdx: number): void

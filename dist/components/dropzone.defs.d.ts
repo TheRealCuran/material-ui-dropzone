@@ -31,8 +31,6 @@ export interface DropzoneAreaBaseProps {
     filesLimit?: number;
     /** Icon to be displayed inside the dropzone area. */
     Icon?: SvgIconComponent;
-    /** Currently loaded files. */
-    fileObjects?: FileObject[];
     /** Maximum file size (in bytes) that the dropzone will accept. */
     maxFileSize?: number;
     /** Text inside the dropzone. */
@@ -151,19 +149,6 @@ export interface DropzoneAreaBaseProps {
      */
     getPreviewIcon?(fileObject: FileObject): JSX.Element;
     /**
-     * Fired when new files are added to dropzone.
-     *
-     * @param {FileObject[]} newFiles The new files added to the dropzone.
-     */
-    onAdd?(newFiles: FileObject[]): void;
-    /**
-     * Fired when a file is deleted from the previews panel.
-     *
-     * @param {FileObject} deletedFileObject The file that was removed.
-     * @param {number} index The index of the removed file object.
-     */
-    onDelete?(deletedFileObject: FileObject, index: number): void;
-    /**
      * Fired when the user drops files into the dropzone.
      *
      * @param {File[]} droppedFiles All the files dropped into the dropzone.
@@ -212,18 +197,6 @@ export interface DropzoneDialogBaseProps extends DropzoneAreaBaseProps {
     cancelButtonText?: string;
     /** Submit button text in dialog. */
     submitButtonText?: string;
-    /**
-     * Fired when the modal is closed.
-     *
-     * @param {SyntheticEvent} event The react `SyntheticEvent`
-     */
-    onClose?(evt: React.SyntheticEvent): void;
-    /**
-     * Fired when the user clicks the Submit button.
-     *
-     * @param {SyntheticEvent} event The react `SyntheticEvent`
-     */
-    onSave?(evt: React.SyntheticEvent): void;
     /**
      * Shows previews **BELOW** the dropzone.
      *
