@@ -1,5 +1,5 @@
 /* eslint-disable node/no-unsupported-features/es-builtins */
-import * as React from 'react'
+import { AttachFile, CloudUpload } from '@mui/icons-material'
 import {
   AlertColor,
   Button,
@@ -9,20 +9,20 @@ import {
   styled,
   Typography,
 } from '@mui/material'
-import { AttachFile, CloudUpload } from '@mui/icons-material'
 import clsx from 'clsx'
-import merge from 'lodash.merge'
 import isEqual from 'lodash.isequal'
+import merge from 'lodash.merge'
+import * as React from 'react'
 import Dropzone, { DropEvent, FileRejection } from 'react-dropzone'
 import { convertBytesToMbsOrKbs, isImage, readFile } from '../helpers'
-import { PreviewList } from './preview-list'
-import { SnackbarContentWrapper } from './snackbar-content-wrapper'
+import { DropzoneContext } from './dropzone-ctx'
 import {
   DropzoneAreaBaseProps,
   FileObject,
   PreviewGridProps,
 } from './dropzone.defs'
-import { DropzoneContext } from './dropzone-ctx'
+import { PreviewList } from './preview-list'
+import { SnackbarContentWrapper } from './snackbar-content-wrapper'
 
 interface DropzoneAreaBaseState extends DropzoneAreaBaseProps {
   filesLimit: number
@@ -65,7 +65,13 @@ class DropzoneAreaBaseImpl extends React.PureComponent<
 
   #defaultGetPreviewIcon(fileObject: FileObject): JSX.Element {
     if (isImage(fileObject.file) && fileObject.data !== null) {
-      return <img role="presentation" src={fileObject.data} />
+      return (
+        <img
+          role="presentation"
+          src={fileObject.data}
+          style={{ width: '150px' }}
+        />
+      )
     }
 
     return <AttachFile />

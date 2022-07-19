@@ -1,10 +1,10 @@
-import * as React from 'react'
-import merge from 'lodash.merge'
 import isEqual from 'lodash.isequal'
+import merge from 'lodash.merge'
+import * as React from 'react'
 import { createFileFromUrl, readFile } from '../helpers'
 import { DropzoneAreaBase } from './dropzone-area-base'
-import { DropzoneAreaBaseProps, FileData, FileObject } from './dropzone.defs'
 import { DropzoneContext } from './dropzone-ctx'
+import { DropzoneAreaBaseProps, FileData, FileObject } from './dropzone.defs'
 
 interface DropzoneAreaProps
   extends Omit<DropzoneAreaBaseProps, 'fileObjects' | 'onAdd' | 'onDelete'> {

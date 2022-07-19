@@ -1,10 +1,3 @@
-import * as React from 'react'
-import {
-  AlertColor,
-  IconButton,
-  SnackbarContent,
-  Typography,
-} from '@mui/material'
 import {
   CheckCircle,
   Close,
@@ -13,6 +6,13 @@ import {
   SvgIconComponent,
   Warning,
 } from '@mui/icons-material'
+import {
+  AlertColor,
+  IconButton,
+  SnackbarContent,
+  Typography,
+} from '@mui/material'
+import * as React from 'react'
 
 interface SnackbarContentWrapperProps {
   variant: AlertColor

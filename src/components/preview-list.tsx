@@ -1,6 +1,6 @@
-import * as React from 'react'
-import { Chip, ChipProps, Fab, Grid, styled, Typography } from '@mui/material'
 import { Delete } from '@mui/icons-material'
+import { Chip, ChipProps, Fab, Grid, styled, Typography } from '@mui/material'
+import * as React from 'react'
 import { FileObject, PreviewGridProps } from './dropzone.defs'
 
 interface PreviewListProps {

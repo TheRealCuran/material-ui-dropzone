@@ -1,3 +1,4 @@
+import { SvgIconComponent } from '@mui/icons-material'
 import {
   AlertColor,
   ChipProps,
@@ -5,7 +6,6 @@ import {
   GridProps,
   SnackbarProps,
 } from '@mui/material'
-import { SvgIconComponent } from '@mui/icons-material'
 import { DropEvent, DropzoneProps } from 'react-dropzone'
 
 export type FileObject = {

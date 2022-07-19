@@ -1,10 +1,10 @@
-import * as React from 'react'
-import merge from 'lodash.merge'
 import isEqual from 'lodash.isequal'
-import { DropzoneDialogBase } from './dropzone-dialog-base'
+import merge from 'lodash.merge'
+import * as React from 'react'
 import { createFileFromUrl, readFile } from '../helpers'
-import { DropzoneDialogBaseProps, FileData, FileObject } from './dropzone.defs'
 import { DropzoneContext } from './dropzone-ctx'
+import { DropzoneDialogBase } from './dropzone-dialog-base'
+import { DropzoneDialogBaseProps, FileData, FileObject } from './dropzone.defs'
 
 interface DropzoneDialogProps
   extends Omit<DropzoneDialogBaseProps, 'fileObjects' | 'onSave'> {
@@ -168,9 +168,11 @@ export class DropzoneDialog extends React.PureComponent<
     )
       .then((fileObjs) => {
         const { fileObjects } = this.state
-        this.setState({
-          fileObjects: [...fileObjects, ...fileObjs],
-        })
+        if (fileObjs.length > 0) {
+          this.setState({
+            fileObjects: [...fileObjects, ...fileObjs],
+          })
+        }
         return true
       })
       .catch((error) => {

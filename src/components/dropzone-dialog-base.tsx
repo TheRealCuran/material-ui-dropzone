@@ -1,4 +1,3 @@
-import * as React from 'react'
 import {
   Button,
   Dialog,
@@ -7,11 +6,12 @@ import {
   DialogProps,
   DialogTitle,
 } from '@mui/material'
-import merge from 'lodash.merge'
 import isEqual from 'lodash.isequal'
+import merge from 'lodash.merge'
+import * as React from 'react'
 import { DropzoneAreaBase } from './dropzone-area-base'
-import { DropzoneDialogBaseProps } from './dropzone.defs'
 import { DropzoneContext } from './dropzone-ctx'
+import { DropzoneDialogBaseProps } from './dropzone.defs'
 
 interface DropzoneDialogBaseState extends DropzoneDialogBaseProps {
   open: boolean
