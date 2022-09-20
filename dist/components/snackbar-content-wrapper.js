@@ -1,8 +1,8 @@
 var _SnackbarContentWrapper_variantIcon;
 import { __classPrivateFieldGet } from "tslib";
-import * as React from 'react';
-import { IconButton, SnackbarContent, Typography, } from '@mui/material';
 import { CheckCircle, Close, Error, Info, Warning, } from '@mui/icons-material';
+import { IconButton, SnackbarContent, Typography, } from '@mui/material';
+import * as React from 'react';
 export class SnackbarContentWrapper extends React.PureComponent {
     constructor(props) {
         super(props);

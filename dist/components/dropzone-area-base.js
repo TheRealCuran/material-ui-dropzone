@@ -1,17 +1,17 @@
 var _DropzoneAreaBaseImpl_instances, _DropzoneAreaBaseImpl_defaultGetPreviewIcon, _DropzoneAreaBaseImpl_defaultProps, _DropzoneAreaBaseImpl_handleDropAccepted, _DropzoneAreaBaseImpl_handleDropRejected, _DropzoneAreaBaseImpl_handleRemove, _DropzoneAreaBaseImpl_handleCloseSnackbar;
 import { __classPrivateFieldGet } from "tslib";
 /* eslint-disable node/no-unsupported-features/es-builtins */
-import * as React from 'react';
-import { Button, Snackbar, styled, Typography, } from '@mui/material';
 import { AttachFile, CloudUpload } from '@mui/icons-material';
+import { Button, Snackbar, styled, Typography, } from '@mui/material';
 import clsx from 'clsx';
-import merge from 'lodash.merge';
 import isEqual from 'lodash.isequal';
+import merge from 'lodash.merge';
+import * as React from 'react';
 import Dropzone from 'react-dropzone';
 import { convertBytesToMbsOrKbs, isImage, readFile } from '../helpers';
+import { DropzoneContext } from './dropzone-ctx';
 import { PreviewList } from './preview-list';
 import { SnackbarContentWrapper } from './snackbar-content-wrapper';
-import { DropzoneContext } from './dropzone-ctx';
 /**
  * This components creates a Material-UI Dropzone, with previews and snackbar notifications.
  */
@@ -113,7 +113,7 @@ class DropzoneAreaBaseImpl extends React.PureComponent {
 }
 _DropzoneAreaBaseImpl_defaultProps = new WeakMap(), _DropzoneAreaBaseImpl_instances = new WeakSet(), _DropzoneAreaBaseImpl_defaultGetPreviewIcon = function _DropzoneAreaBaseImpl_defaultGetPreviewIcon(fileObject) {
     if (isImage(fileObject.file) && fileObject.data !== null) {
-        return React.createElement("img", { role: "presentation", src: fileObject.data });
+        return (React.createElement("img", { role: "presentation", src: fileObject.data, style: { width: '150px' } }));
     }
     return React.createElement(AttachFile, null);
 }, _DropzoneAreaBaseImpl_handleDropAccepted = function _DropzoneAreaBaseImpl_handleDropAccepted(acceptedFiles, evt) {
@@ -227,14 +227,14 @@ export const DropzoneAreaBase = styled(DropzoneAreaBaseImpl, {
     boxSizing: 'border-box',
     cursor: 'pointer',
     overflow: 'hidden',
-    '&.DropzoneAreaBase-active': {
+    '& .DropzoneAreaBase-active': {
         animation: '$progress 2s linear infinite !important',
         backgroundImage: `repeating-linear-gradient(-45deg, ${theme.palette.background.paper}, ${theme.palette.background.paper} 25px, ${theme.palette.divider} 25px, ${theme.palette.divider} 50px)`,
         backgroundSize: '150% 100%',
         border: 'solid',
         borderColor: theme.palette.primary.light,
     },
-    '&.DropzoneAreaBase-invalid': {
+    '& .DropzoneAreaBase-invalid': {
         backgroundImage: `repeating-linear-gradient(-45deg, ${theme.palette.error.light}, ${theme.palette.error.light} 25px, ${theme.palette.error.dark} 25px, ${theme.palette.error.dark} 50px)`,
         borderColor: theme.palette.error.main,
     },

@@ -1,6 +1,6 @@
-import * as React from 'react';
-import { Chip, Fab, Grid, styled, Typography } from '@mui/material';
 import { Delete } from '@mui/icons-material';
+import { Chip, Fab, Grid, styled, Typography } from '@mui/material';
+import * as React from 'react';
 class PreviewListImpl extends React.PureComponent {
     constructor(props) {
         super(props);
@@ -36,7 +36,7 @@ export const PreviewList = styled(PreviewListImpl, {
         '&:hover .MuiFab-root': {
             opacity: 1,
         },
-        '&.MuiGrid-item': {
+        '& .MuiGrid-item': {
             height: 100,
             width: 'initial',
             maxWidth: '100%',
@@ -48,7 +48,7 @@ export const PreviewList = styled(PreviewListImpl, {
             zIndex: 5,
             opacity: 1,
         },
-        '&.MuiFab-root': {
+        '& .MuiFab-root': {
             transition: '.5s ease',
             position: 'absolute',
             opacity: 0,

@@ -1,5 +1,5 @@
-import * as React from 'react';
 import { ChipProps } from '@mui/material';
+import * as React from 'react';
 import { FileObject, PreviewGridProps } from './dropzone.defs';
 interface PreviewListProps {
     fileObjects: FileObject[];

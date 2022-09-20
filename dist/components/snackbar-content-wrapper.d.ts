@@ -1,6 +1,6 @@
-import * as React from 'react';
-import { AlertColor } from '@mui/material';
 import { SvgIconComponent } from '@mui/icons-material';
+import { AlertColor } from '@mui/material';
+import * as React from 'react';
 interface SnackbarContentWrapperProps {
     variant: AlertColor;
     message: string | JSX.Element;

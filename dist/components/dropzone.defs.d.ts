@@ -1,6 +1,6 @@
 /// <reference types="react" />
-import { AlertColor, ChipProps, DialogProps, GridProps, SnackbarProps } from '@mui/material';
 import { SvgIconComponent } from '@mui/icons-material';
+import { AlertColor, ChipProps, DialogProps, GridProps, SnackbarProps } from '@mui/material';
 import { DropEvent, DropzoneProps } from 'react-dropzone';
 export declare type FileObject = {
     readonly file: File;

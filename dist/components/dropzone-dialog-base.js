@@ -1,9 +1,9 @@
 var _DropzoneDialogBase_defaultProps;
 import { __classPrivateFieldGet } from "tslib";
-import * as React from 'react';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, } from '@mui/material';
-import merge from 'lodash.merge';
 import isEqual from 'lodash.isequal';
+import merge from 'lodash.merge';
+import * as React from 'react';
 import { DropzoneAreaBase } from './dropzone-area-base';
 import { DropzoneContext } from './dropzone-ctx';
 /**

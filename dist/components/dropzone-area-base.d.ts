@@ -1,7 +1,7 @@
-import * as React from 'react';
 import { AlertColor, ChipProps, SnackbarProps } from '@mui/material';
-import { DropzoneAreaBaseProps, FileObject, PreviewGridProps } from './dropzone.defs';
+import * as React from 'react';
 import { DropzoneContext } from './dropzone-ctx';
+import { DropzoneAreaBaseProps, FileObject, PreviewGridProps } from './dropzone.defs';
 interface DropzoneAreaBaseState extends DropzoneAreaBaseProps {
     filesLimit: number;
     maxFileSize: number;

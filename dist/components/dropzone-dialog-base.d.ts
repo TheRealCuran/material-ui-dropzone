@@ -1,7 +1,7 @@
-import * as React from 'react';
 import { DialogProps } from '@mui/material';
-import { DropzoneDialogBaseProps } from './dropzone.defs';
+import * as React from 'react';
 import { DropzoneContext } from './dropzone-ctx';
+import { DropzoneDialogBaseProps } from './dropzone.defs';
 interface DropzoneDialogBaseState extends DropzoneDialogBaseProps {
     open: boolean;
     dialogTitle: string | JSX.Element;

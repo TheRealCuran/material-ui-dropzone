@@ -1,8 +1,8 @@
 var _DropzoneArea_instances, _DropzoneArea_defaultProps, _DropzoneArea_notifyFileChange, _DropzoneArea_addFiles, _DropzoneArea_deleteFile, _DropzoneArea_splitDropzoneAreaProps;
 import { __classPrivateFieldGet } from "tslib";
-import * as React from 'react';
-import merge from 'lodash.merge';
 import isEqual from 'lodash.isequal';
+import merge from 'lodash.merge';
+import * as React from 'react';
 import { createFileFromUrl, readFile } from '../helpers';
 import { DropzoneAreaBase } from './dropzone-area-base';
 import { DropzoneContext } from './dropzone-ctx';
