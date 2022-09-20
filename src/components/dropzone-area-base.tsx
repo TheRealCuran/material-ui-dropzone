@@ -468,14 +468,14 @@ export const DropzoneAreaBase = styled(DropzoneAreaBaseImpl, {
   boxSizing: 'border-box',
   cursor: 'pointer',
   overflow: 'hidden',
-  '&.DropzoneAreaBase-active': {
+  '& .DropzoneAreaBase-active': {
     animation: '$progress 2s linear infinite !important',
     backgroundImage: `repeating-linear-gradient(-45deg, ${theme.palette.background.paper}, ${theme.palette.background.paper} 25px, ${theme.palette.divider} 25px, ${theme.palette.divider} 50px)`,
     backgroundSize: '150% 100%',
     border: 'solid',
     borderColor: theme.palette.primary.light,
   },
-  '&.DropzoneAreaBase-invalid': {
+  '& .DropzoneAreaBase-invalid': {
     backgroundImage: `repeating-linear-gradient(-45deg, ${theme.palette.error.light}, ${theme.palette.error.light} 25px, ${theme.palette.error.dark} 25px, ${theme.palette.error.dark} 50px)`,
     borderColor: theme.palette.error.main,
   },

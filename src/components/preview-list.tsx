@@ -104,7 +104,7 @@ export const PreviewList = styled(PreviewListImpl, {
     '&:hover .MuiFab-root': {
       opacity: 1,
     },
-    '&.MuiGrid-item': {
+    '& .MuiGrid-item': {
       height: 100,
       width: 'initial',
       maxWidth: '100%',
@@ -116,7 +116,7 @@ export const PreviewList = styled(PreviewListImpl, {
       zIndex: 5,
       opacity: 1,
     },
-    '&.MuiFab-root': {
+    '& .MuiFab-root': {
       transition: '.5s ease',
       position: 'absolute',
       opacity: 0,
