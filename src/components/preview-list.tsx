@@ -14,6 +14,7 @@ interface PreviewListProps {
   previewChipProps: ChipProps
   previewGridProps: PreviewGridProps
   getPreviewIcon(fileObject: FileObject): JSX.Element
+  className?: string
 }
 
 class PreviewListImpl extends React.PureComponent<PreviewListProps> {
@@ -30,6 +31,7 @@ class PreviewListImpl extends React.PureComponent<PreviewListProps> {
       previewChipProps,
       previewGridProps,
       getPreviewIcon,
+      className,
     } = this.props
     if (useChipsForPreview) {
       return (
@@ -45,6 +47,7 @@ class PreviewListImpl extends React.PureComponent<PreviewListProps> {
                 {...previewGridProps.item}
                 item={true}
                 key={`${fileObject.file?.name ?? 'file'}-${i}`}
+                className={className}
               >
                 <Chip
                   variant="outlined"

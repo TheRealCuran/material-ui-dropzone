@@ -187,6 +187,10 @@ export interface DropzoneAreaBaseProps {
    * @param {string} variant One of "error", "info", "success".
    */
   onAlert?(message: string, variant: AlertColor): void
+  /**
+   * @ignore
+   */
+  className?: string
 }
 
 export interface DropzoneDialogBaseProps extends DropzoneAreaBaseProps {

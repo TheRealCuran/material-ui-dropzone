@@ -343,7 +343,7 @@ class DropzoneAreaBaseImpl extends React.PureComponent<
           {({ getRootProps, getInputProps, isDragActive, isDragReject }) => (
             <div
               {...getRootProps({
-                className: clsx('DropzoneAreaBase-root', {
+                className: clsx(this.props.className, 'DropzoneAreaBase-root', {
                   'DropzoneAreaBase-active': isDragActive,
                   'DropzoneAreaBase-invalid':
                     !disableRejectionFeedback && isDragReject,
